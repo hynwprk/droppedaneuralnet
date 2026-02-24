@@ -88,7 +88,7 @@ Step 3: Hill-climb (bubble sort + gap swaps)
 
 ## Paper
 
-Hyunwoo Park. *I Dropped a Neural Net.* 2024.
+Hyunwoo Park. *I Dropped a Neural Net.* 2026. [[arXiv:2602.19845]](https://arxiv.org/abs/2602.19845)
 
 ## License
 
