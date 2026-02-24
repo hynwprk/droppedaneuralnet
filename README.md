@@ -2,7 +2,7 @@
 
 A solver for the Jane Street puzzle: given 97 shuffled linear layers from a 48-block ResNet and 10,000 data points, recover the exact original ordering.
 
-The combined search space is $(48!)^2 \approx 10^{122}$ — more than the atoms in the observable universe. Our solver reconstructs the network in under 30 seconds with **MSE = 0**.
+ Our solver reconstructs the network in under 30 seconds.
 
 ## The Problem
 
