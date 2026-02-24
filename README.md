@@ -14,9 +14,9 @@ All 97 layers were extracted and shuffled. The task: put them back in order.
 
 ### Step 1 — Pairing (weight-only, <1s)
 
-Dynamic isometry in well-trained ResNets causes the product $W_{out} W_{in}$ for correctly paired layers to exhibit a dominant negative diagonal. We compute the **diagonal dominance ratio**:
+Dynamic isometry in well-trained ResNets causes the product $W_{out} W_{in}$ for correctly paired layers to exhibit a dominant negative diagonal. We compute the **diagonal dominance ratio** (Eq. 1 in the paper):
 
-$$\text{ratio}(i, j) = \frac{\|\text{diag}(W_{out}^j W_{in}^i)\|_2}{\|\text{off-diag}(W_{out}^j W_{in}^i)\|_F}$$
+$$d(i, j) = \frac{|\text{tr}(W_{out}^{(j)} W_{in}^{(i)})|}{\|W_{out}^{(j)} W_{in}^{(i)}\|_F}$$
 
 for all 48×48 candidate pairings, then solve a maximum-weight bipartite matching via the **Hungarian algorithm**. This yields all 48 correct pairs.
 
@@ -48,8 +48,8 @@ python solve.py
 
 ```
 Step 1: Pair layers via diagonal dominance + Hungarian algorithm
-  Time: 0.09s
-  Matched ratios: min=0.309, max=0.632, mean=0.493
+  Time: 0.05s
+  Matched ratios: min=1.764, max=3.232, mean=2.785
 
 Step 2: Seed initial order by ||W_out||_F
   Seed MSE (N=1000): 0.075716
@@ -61,8 +61,15 @@ Step 3: Hill-climb (bubble sort + gap swaps)
     Converged.
 
   RESULT
-  Total time:  10.3s
+  Total time:  10.4s
   Final MSE:   0.000000000000
+  Permutation: [43, 34, 65, 22, 69, 89, 28, 12, 27, 76, 81, 8, 5, 21,
+                62, 79, 64, 70, 94, 96, 4, 17, 48, 9, 23, 46, 14, 33,
+                95, 26, 50, 66, 1, 40, 15, 67, 41, 92, 16, 83, 77, 32,
+                10, 20, 3, 53, 45, 19, 87, 71, 88, 54, 39, 38, 18, 25,
+                56, 30, 91, 29, 44, 82, 35, 24, 61, 80, 86, 57, 31, 36,
+                13, 7, 59, 52, 68, 47, 84, 63, 74, 90, 0, 75, 73, 11,
+                37, 6, 58, 78, 42, 55, 49, 72, 2, 51, 60, 93, 85]
 
   PERFECT RECONSTRUCTION (MSE = 0)
 ```

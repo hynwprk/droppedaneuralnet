@@ -129,9 +129,9 @@ def eval_mse(block_list, pieces, last_idx, X, y):
 def pair_blocks(pieces, inp_pieces, out_pieces):
     """
     For each candidate (inp_i, out_j) pair, compute the diagonal dominance
-    ratio of M = W_out @ W_in:
+    ratio of M = W_out @ W_in (Equation 1 in the paper):
 
-        ratio = ||diag(M)||_2 / ||off_diag(M)||_F
+        d(i, j) = |tr(W_out^(j) W_in^(i))| / ||W_out^(j) W_in^(i)||_F
 
     Well-trained ResNet blocks exhibit near-identity Jacobians (dynamic
     isometry), causing M for correctly paired layers to have a dominant
@@ -146,9 +146,7 @@ def pair_blocks(pieces, inp_pieces, out_pieces):
         for j in range(n):
             W_out = pieces[out_pieces[j]]['weight']
             M = W_out @ W_in
-            d = M.diag()
-            off = M - torch.diag(d)
-            ratio_matrix[i][j] = d.norm().item() / (off.norm().item() + 1e-10)
+            ratio_matrix[i][j] = abs(M.trace().item()) / (M.norm().item() + 1e-10)
 
     mx = max(ratio_matrix[i][j] for i in range(n) for j in range(n)) + 1.0
     cost = [[mx - ratio_matrix[i][j] for j in range(n)] for i in range(n)]
